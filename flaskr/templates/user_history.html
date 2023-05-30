@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>user history</title>
+  </head>
+  <body>
+    <h1>User History</h1>
+    <p>Name: {{user.Name}}</p>
+    <p>CardId: {{request.args.get("card_id")}}</p>
+    {% set index = 1 %} {%- for history in histories%}
+    <p>
+      {{index}}. Start location: {{history.Start_loc}}, Stop location:
+      {{history.Stop_loc}}, Cost: {{history.Cost}}, Time: {{history.Time}}
+    </p>
+    {% set index= index + 1 %} {% endfor %}
+  </body>
+</html>

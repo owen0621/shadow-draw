@@ -1,0 +1,8 @@
+flask
+SQLAlchemy
+flask-SQLAlchemy
+mysqlclient
+python-dotenv
+opencv-python
+mysql-connector
+MYSQL-connector-python

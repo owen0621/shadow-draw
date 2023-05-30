@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>user profile</title>
+  </head>
+  <body>
+    <h1>User Profile</h1>
+    <p>Name: {{user.Name}}</p>
+    <p>CardId: {{request.args.get("card_id")}}</p>
+    {% set index = 1 %} {% for ensure in ensures %}
+    <p>
+      {{index}}. Ensurance_type: {{ensure.Type}}, Ensurance_amount:
+      {{ensure.Amount}}
+    </p>
+    {% set index= index + 1 %} {% endfor %}
+  </body>
+</html>
