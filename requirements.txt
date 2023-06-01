@@ -1,9 +1,16 @@
+# flask
 flask
-SQLAlchemy
-flask-SQLAlchemy
+# mysql
 mysqlclient
+mysql-connector
+sqlalchemy
+pymysql
+MYSQL-connector-python
+flask_mysqldb
+# util
+numpy
+pandas
+pandasql
+tqdm
 python-dotenv
 opencv-python
-mysql-connector
-MYSQL-connector-python
-tqdm

@@ -32,6 +32,15 @@
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
 
+        fetch(`${api.hostName}account/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+        });
+
+
         // 開始繪製
         function startDrawing(e) {
             isDrawing = true;
