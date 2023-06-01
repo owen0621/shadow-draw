@@ -10,7 +10,7 @@ flask_mysqldb
 # util
 numpy
 pandas
-pandasql
 tqdm
 python-dotenv
 opencv-python
+jupyterlab

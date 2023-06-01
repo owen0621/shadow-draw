@@ -1,6 +1,7 @@
 .vscode
-images
-testdb.sql
+# images
+images-og
+# testdb.sql
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
