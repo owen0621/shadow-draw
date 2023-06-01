@@ -41,8 +41,18 @@ app.register_blueprint(api_blueprint, url_prefix="/api")
 # def not_found_error(error):
 #     app.logger.error(str(error))
 #     return render_template("404.html"), 404
+# # error handler 404
+# @app.errorhandler(404)
+# def not_found_error(error):
+#     app.logger.error(str(error))
+#     return render_template("404.html"), 404
 
 
+# # error handler 400
+# @app.errorhandler(400)
+# def parameter_not_found_error(error):
+#     app.logger.error(str(error))
+#     return render_template("400.html"), 400
 # # error handler 400
 # @app.errorhandler(400)
 # def parameter_not_found_error(error):
@@ -55,8 +65,18 @@ app.register_blueprint(api_blueprint, url_prefix="/api")
 # def internal_server_error(error):
 #     app.logger.error(str(error))
 #     return render_template("500.html"), 500
+# # error handler 500
+# @app.errorhandler(500)
+# def internal_server_error(error):
+#     app.logger.error(str(error))
+#     return render_template("500.html"), 500
 
 
+# # default error handler
+# @app.errorhandler(Exception)
+# def default_error_handler(error):
+#     app.logger.error(str(error))
+#     return render_template("500.html"), 500
 # # default error handler
 # @app.errorhandler(Exception)
 # def default_error_handler(error):
