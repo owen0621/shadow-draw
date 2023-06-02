@@ -1,11 +1,12 @@
-from flask import Flask
-from dotenv import load_dotenv
-import os
+from flask import Flask, request, send_file
+from PIL import Image
+from sqlalchemy import create_engine
+import pandas as pd
+import numpy as np
+from io import BytesIO
 
-from database import db
-
-from user import user_blueprint
-from api import api_blueprint
+from Candidate_match import candidate_match
+from Add_image import add_image
 
 
 app = Flask(
@@ -14,75 +15,37 @@ app = Flask(
     static_folder="static",
     template_folder="templates",
 )
-load_dotenv()
 
-app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
-app.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
-app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-app.config["MYSQL_DB"] = "Youbike"
-app.config["MYSQL_CURSORCLASS"] = "DictCursor"
-
-db.init_app(app)
+connection = create_engine(
+    "mysql+pymysql://root:password@localhost:3306/SHADOWDRAW", echo=False
+)
+query = "SELECT * FROM SKETCH"
+sketches_in_db = pd.read_sql(query, connection)
 
 
-# root
 @app.route("/")
-def index():
-    return "Youbike"
+def root():
+    return "draw"
 
 
-# register blueprint
-app.register_blueprint(user_blueprint, url_prefix="/user")
-app.register_blueprint(api_blueprint, url_prefix="/api")
+@app.route("/get_background", methods=["POST"])
+def get_background():
+    image_file = request.files["canvasImage"]
+    image = Image.open(image_file)
+    # Process the image as needed
+    candidates = candidate_match(np.array(image), sketches_in_db)
+    shadow_img = add_image(candidates)
+    mod_img = Image.fromarray(shadow_img)
 
-# # error handler 404
-# @app.errorhandler(404)
-# def not_found_error(error):
-#     app.logger.error(str(error))
-#     return render_template("404.html"), 404
-# # error handler 404
-# @app.errorhandler(404)
-# def not_found_error(error):
-#     app.logger.error(str(error))
-#     return render_template("404.html"), 404
+    # Save the modified image to a BytesIO object
+    image_io = BytesIO()
+    mod_img.save(image_io, "JPEG")
+    image_io.seek(0)
 
-
-# # error handler 400
-# @app.errorhandler(400)
-# def parameter_not_found_error(error):
-#     app.logger.error(str(error))
-#     return render_template("400.html"), 400
-# # error handler 400
-# @app.errorhandler(400)
-# def parameter_not_found_error(error):
-#     app.logger.error(str(error))
-#     return render_template("400.html"), 400
-
-
-# # error handler 500
-# @app.errorhandler(500)
-# def internal_server_error(error):
-#     app.logger.error(str(error))
-#     return render_template("500.html"), 500
-# # error handler 500
-# @app.errorhandler(500)
-# def internal_server_error(error):
-#     app.logger.error(str(error))
-#     return render_template("500.html"), 500
-
-
-# # default error handler
-# @app.errorhandler(Exception)
-# def default_error_handler(error):
-#     app.logger.error(str(error))
-#     return render_template("500.html"), 500
-# # default error handler
-# @app.errorhandler(Exception)
-# def default_error_handler(error):
-#     app.logger.error(str(error))
-#     return render_template("500.html"), 500
+    # Return the modified image as a response
+    return send_file(image_io, mimetype="image/jpeg")
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()
