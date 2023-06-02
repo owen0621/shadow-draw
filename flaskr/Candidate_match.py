@@ -34,6 +34,7 @@ def patch_match(argv):
 
 
 def candidate_match(img, df):
+    cv2.imwrite("debug.jpg", img)
     sketches = img2sketches(img, 480, 96, 25)
     # patch_match((sketches[100], 100//4, df))
     set_start_method("fork", True)
