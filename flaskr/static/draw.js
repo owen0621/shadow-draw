@@ -14,18 +14,15 @@ canvas.addEventListener('mousemove', draw);
 canvas.addEventListener('mouseup', stopDrawing);
 canvas.addEventListener('mouseout', stopDrawing);
 
+
 function setBackground() {
     context.globalCompositeOperation = 'destination-over';
-    // Now draw!
     context.fillStyle = "white";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     canvas.toBlob(function (blob) {
         const formData = new FormData();
         formData.append('canvasImage', blob, 'canvas.jpg');
-        if (bgimg !== null) {
-            canvas.style.backgroundImage = bgimg;
-        }
 
         fetch('/get_background', {
             method: 'POST',
@@ -54,8 +51,9 @@ function startDrawing(e) {
 // 停止繪製
 function stopDrawing() {
     isDrawing = false;
+    setBackground();
     if (bgimg !== null) {
-        canvas.style.backgroundImage = bgimg;
+        document.body.style.backgroundImage = bgimg;
     }
 }
 
@@ -109,7 +107,6 @@ saveBtn.addEventListener('click', function () {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     const image = canvas.toDataURL("image/jpeg", 1);
-    console.log(image);
     const link = document.createElement('a');
     link.href = image;
     link.download = 'canvas.jpg';
@@ -117,4 +114,4 @@ saveBtn.addEventListener('click', function () {
 });
 
 // Call get_background API every second
-setInterval(setBackground, 10000);
+// setInterval(setBackground, 10000);
